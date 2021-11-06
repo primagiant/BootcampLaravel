@@ -28,9 +28,9 @@ function datatable() {
                 },
             },
             "column": column,
-            "drawCallback": function () {
-                // user_role_menu_action();
-            }
+            // "drawCallback": function () {
+            //     user_role_menu_action();
+            // }
         });
     });
 }

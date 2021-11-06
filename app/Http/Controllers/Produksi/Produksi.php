@@ -38,7 +38,6 @@ class Produksi extends Controller
             ->orderBy($order_column, $order_type)
             ->get();
 
-        $total_data++;
         $data = [];
 
         foreach ($data_list as $key => $row) {
@@ -61,7 +60,7 @@ class Produksi extends Controller
         }
 
         $json_data = [
-            "draw" => intval($request->input('draw')),
+            "draw" => intval($total_data - 1),
             "recordTotal" => intval($total_data - 1),
             "recordFiltered" => intval($total_data - 1),
             "data" => $data,
