@@ -1,9 +1,9 @@
 $(document).ready(function () {
     datatable();
-})
+});
 
 function datatable() {
-    $('.datatable-new').each(function () {
+    $('#datatable-new').each(function () {
         let _token = $('body').data('csrf-token');
         let url = $(this).data('url');
         let column = $(this).data('column');
@@ -24,13 +24,12 @@ function datatable() {
                 "type": "POST",
                 "data": {
                     _token: _token,
-                    name: name,
                 },
             },
-            "column": column,
-            // "drawCallback": function () {
-            //     user_role_menu_action();
-            // }
+            "columns": column,
+            "drawCallback": function () {
+                // user_role_menu_action();
+            }
         });
     });
 }

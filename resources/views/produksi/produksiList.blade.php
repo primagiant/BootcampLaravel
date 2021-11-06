@@ -6,8 +6,8 @@
     <div class="m-portlet akses-list">
         <div class="m-portlet__body">
             <div class="table-responsive">
-                <table class="akses-list table table-bordered datatable-new" data-url="{{ route('produksiDatatable') }}"
-                    data-column="{{json_encode($datatable_column)}}">
+                <table class="akses-list table table-bordered" id="datatable-new"
+                    data-url="{{ route('produksiDatatable') }}" data-column="{{json_encode($datatable_column)}}">
                     <thead>
                         <th width="20">No</th>
                         <th class="no-sort">Kode Produksi</th>

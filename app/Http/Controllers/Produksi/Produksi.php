@@ -18,12 +18,14 @@ class Produksi extends Controller
             ["data" => "tanggal_selesai"],
             ["data" => "status"],
             ["data" => "publish"],
-            ["data" => "options"],
+            ["data" => "menu"],
         ];
+
         return view('produksi.produksiList', [
             'datatable_column' => $datatable_column,
         ]);
     }
+
     public function datatable(Request $request)
     {
         $total_data = mProduksi::count();
@@ -38,11 +40,12 @@ class Produksi extends Controller
             ->orderBy($order_column, $order_type)
             ->get();
 
-        $data = [];
+        $total_data++;
 
+        $data = [];
         foreach ($data_list as $key => $row) {
             $key++;
-            if ($order_type == "asc") {
+            if ($order_type == "desc") {
                 $no = $key + $start;
             } else {
                 $no = $total_data - $key - $start;
@@ -55,14 +58,13 @@ class Produksi extends Controller
             $nestedData['tanggal_selesai'] = $row->tgl_selesai_produksi;
             $nestedData['status'] = $row->status;
             $nestedData['publish'] = $row->publish;
-
             $data[] = $nestedData;
         }
 
         $json_data = [
-            "draw" => intval($total_data - 1),
-            "recordTotal" => intval($total_data - 1),
-            "recordFiltered" => intval($total_data - 1),
+            "draw" => intval($request->draw),
+            "recordsTotal" => intval($total_data - 1),
+            "recordsFiltered" => intval($total_data - 1),
             "data" => $data,
             "all_request" => $request->all(),
         ];
