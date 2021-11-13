@@ -1,6 +1,17 @@
 @extends('layouts.base')
 
 @section('content')
+<!-- BEGIN: Subheader -->
+<div class="m-subheader ">
+    <div class="d-flex align-items-center">
+        <div class="mr-auto">
+            <h3 class="m-subheader__title m-subheader__title--separator">
+                Edit Data Produksi
+            </h3>
+        </div>
+    </div>
+</div>
+<!-- END: Subheader -->
 <!--begin: Datatable -->
 <div class="m-content">
     <div class="m-portlet akses-list">
@@ -17,11 +28,8 @@
                                     Kode Produksi
                                 </label>
                                 <input type="text" value="{{ (old('kode_produksi')) ?? $produksi->kode_produksi }}"
-                                    required name="kode_produksi" class="form-control m-input" autofocus
+                                    name="kode_produksi" class="form-control m-input" autofocus
                                     placeholder="Masukkan kode Produksi">
-                                <span class="m-form__help">
-                                    Masukkan kode Produksi
-                                </span>
                             </div>
                         </div>
                         <div class="col-6">
@@ -41,9 +49,6 @@
                                     @endif
                                     @endforeach
                                 </select>
-                                <span class="m-form__help">
-                                    Lokasi Pabrik
-                                </span>
                             </div>
                         </div>
                     </div>
@@ -55,11 +60,7 @@
                                 </label>
                                 <input type="date"
                                     value="{{ (old('tgl_mulai_produksi')) ?? $produksi->tgl_mulai_produksi }}"
-                                    name="tgl_mulai_produksi" required class="form-control m-input"
-                                    placeholder="Mulai Produksi">
-                                <span class="m-form__help">
-                                    Mulai Produksi
-                                </span>
+                                    name="tgl_mulai_produksi" class="form-control m-input" placeholder="Mulai Produksi">
                             </div>
                         </div>
                         <div class="col-6">
@@ -69,11 +70,8 @@
                                 </label>
                                 <input type="date"
                                     value="{{ (old('tgl_selesai_produksi')) ?? $produksi->tgl_selesai_produksi }}"
-                                    name="tgl_selesai_produksi" required class="form-control m-input"
+                                    name="tgl_selesai_produksi" class="form-control m-input"
                                     placeholder="Selesai Produksi">
-                                <span class="m-form__help">
-                                    Selesai Produksi
-                                </span>
                             </div>
                         </div>
                     </div>
@@ -85,9 +83,6 @@
                                 </label>
                                 <textarea name="catatan" value="{{ (old('catatan')) ?? $produksi->catatan }}"
                                     class="form-control m-input" rows="6"></textarea>
-                                <span class="m-form__help">
-                                    Deskripsi Catatan
-                                </span>
                             </div>
                         </div>
                     </div>
@@ -97,6 +92,7 @@
                         <button type="submit" class="btn btn-warning">
                             Edit Data Produksi
                         </button>
+                        <a href="{{ route('produksi') }}" class="btn btn-primary">Kembali ke List</a>
                     </div>
                 </div>
             </form>

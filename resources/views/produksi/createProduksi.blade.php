@@ -1,13 +1,34 @@
 @extends('layouts.base')
 
 @section('content')
-<!--begin: Datatable -->
-<div class="m-content">
-    <div class="m-portlet akses-list">
-        <div class="m-portlet__body">
-            <form action="{{ route('tambahProduksi') }}" data-redirect="{{route('produksi')}}" class="form-send m-form"
-                method="POST">
-                @csrf
+<div class="m-subheader ">
+    <div class="d-flex align-items-center">
+        <div class="mr-auto">
+            <h3 class="m-subheader__title m-subheader__title--separator">
+                Tambah Data Produksi
+            </h3>
+        </div>
+    </div>
+</div>
+
+<form action="{{ route('tambahProduksi') }}" data-redirect="{{route('produksi')}}" class="form-send m-form"
+    method="POST">
+    @csrf
+    <div class="m-content">
+        <div class="m-portlet akses-list">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <span class="m-portlet__head-icon">
+                            <i class="flaticon-placeholder-2"></i>
+                        </span>
+                        <h3 class="m-portlet__head-text">
+                            Data Produksi
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="m-portlet__body">
                 <div class="m-portlet__body">
                     <div class="row">
                         <div class="col-6">
@@ -15,11 +36,8 @@
                                 <label>
                                     Kode Produksi
                                 </label>
-                                <input type="text" required name="kode_produksi" class="form-control m-input" autofocus
+                                <input type="text" name="kode_produksi" class="form-control m-input" autofocus
                                     placeholder="Masukkan kode Produksi">
-                                <span class="m-form__help">
-                                    Masukkan kode Produksi
-                                </span>
                             </div>
                         </div>
                         <div class="col-6">
@@ -33,9 +51,6 @@
                                     </option>
                                     @endforeach
                                 </select>
-                                <span class="m-form__help">
-                                    Lokasi Pabrik
-                                </span>
                             </div>
                         </div>
                     </div>
@@ -45,11 +60,8 @@
                                 <label>
                                     Mulai Produksi
                                 </label>
-                                <input type="date" name="tgl_mulai_produksi" required class="form-control m-input"
+                                <input type="date" name="tgl_mulai_produksi" class="form-control m-input"
                                     placeholder="Mulai Produksi">
-                                <span class="m-form__help">
-                                    Mulai Produksi
-                                </span>
                             </div>
                         </div>
                         <div class="col-6">
@@ -57,11 +69,8 @@
                                 <label>
                                     Selesai Produksi
                                 </label>
-                                <input type="date" name="tgl_selesai_produksi" required class="form-control m-input"
+                                <input type="date" name="tgl_selesai_produksi" class="form-control m-input"
                                     placeholder="Selesai Produksi">
-                                <span class="m-form__help">
-                                    Selesai Produksi
-                                </span>
                             </div>
                         </div>
                     </div>
@@ -72,23 +81,94 @@
                                     Catatan
                                 </label>
                                 <textarea name="catatan" class="form-control m-input" rows="6"></textarea>
-                                <span class="m-form__help">
-                                    Deskripsi Catatan
-                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="m-portlet__foot m-portlet__foot--fit">
-                    <div class="m-form__actions m-form__actions">
-                        <button type="submit" class="btn btn-primary">
-                            Tambah Produksi
-                        </button>
+            </div>
+        </div>
+
+        <div class="m-portlet akses-list">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <span class="m-portlet__head-icon">
+                            <i class="flaticon-placeholder-2"></i>
+                        </span>
+                        <h3 class="m-portlet__head-text">
+                            Pilih Produk
+                        </h3>
                     </div>
                 </div>
-            </form>
+            </div>
+            <div class="m-portlet__body">
+                <div class="m-portlet__body">
+                    <table class="table table-bordered table-striped table-produk">
+                        <thead>
+                            <tr>
+                                <th>Nama Produk</th>
+                                <th>Qty Produksi</th>
+                                <th>Keteragan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="m-portlet akses-list">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <span class="m-portlet__head-icon">
+                            <i class="flaticon-placeholder-2"></i>
+                        </span>
+                        <h3 class="m-portlet__head-text">
+                            Daftar Bahan
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="m-portlet__body data-bahan-view"></div>
+        </div>
+
+        <div class="m-portlet akses-list">
+            <div class="m-portlet__foot m-portlet__foot--fit">
+                <div class="m-form__actions m-form__actions">
+                    <button type="submit" class="btn btn-success">
+                        Tambah Produksi
+                    </button>
+                    <a href="{{ route('produksi') }}" class="btn btn-primary">Kembali ke List</a>
+                </div>
+            </div>
         </div>
     </div>
+</form>
+
+<div class="m--hide">
+    <table class="table-produk-row">
+        <tbody>
+            <tr>
+                <td class="produk">
+                    <select class="form-control" name="id_produk">
+                        {{-- @foreach($produk as $row) --}}
+                        {{-- <option value="{{ $row->id }}">{{ $row->nama_produk }}</option> --}}
+                        {{-- @endforeach --}}
+                    </select>
+                </td>
+                <td class="qty">
+                    <input type="number" class="form-control" name="qty_produksi" value="0">
+                </td>
+                <td>
+                    <textarea name="keterangan" class="form-control"></textarea>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-produk-hapus">Hapus</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
-<!--end: Datatable -->
 @endsection

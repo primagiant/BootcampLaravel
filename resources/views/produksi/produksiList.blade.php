@@ -9,23 +9,36 @@
 @endsection
 
 @section('content')
+<!-- BEGIN: Subheader -->
+<div class="m-subheader ">
+    <div class="d-flex align-items-center">
+        <div class="mr-auto">
+            <h3 class="m-subheader__title m-subheader__title--separator">
+                Produksi List
+            </h3>
+        </div>
+        <a href="{{ route('tambahProduksi') }}" class="btn btn-primary mb-3">
+            Tambah Data
+        </a>
+    </div>
+</div>
+<!-- END: Subheader -->
 <!--begin: Datatable -->
 <div class="m-content">
     <div class="m-portlet akses-list">
         <div class="m-portlet__body">
             <div class="table-responsive">
-                <a href="{{ route('tambahProduksi') }}" class="btn btn-primary mb-3">Tambah Data</a>
                 <table class="akses-list table table-bordered datatable" id="datatable-new"
                     data-url="{{ route('produksiDatatable') }}" data-column="{{json_encode($datatable_column)}}">
                     <thead>
                         <th width="20">No</th>
-                        <th class="no-sort">Kode Produksi</th>
-                        <th class="no-sort">Lokasi</th>
-                        <th class="no-sort">Tanggal Mulai</th>
-                        <th class="no-sort">Tanggal Selesai</th>
-                        <th class="no-sort">Status</th>
-                        <th class="no-sort">Publish</th>
-                        <th class="no-sort">Menu</th>
+                        <th class="no-sort text-center">Kode Produksi</th>
+                        <th class="no-sort text-center">Lokasi</th>
+                        <th class="no-sort text-center">Tanggal Mulai</th>
+                        <th class="no-sort text-center">Tanggal Selesai</th>
+                        <th class="no-sort text-center">Status</th>
+                        <th class="no-sort text-center">Publish</th>
+                        <th class="no-sort text-center">Menu</th>
                     </thead>
                     <tbody>
                     </tbody>

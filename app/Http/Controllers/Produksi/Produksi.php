@@ -23,7 +23,6 @@ class Produksi extends Controller
         ];
 
         return view('produksi.produksiList', [
-            'title' => "Data Produksi",
             'datatable_column' => $datatable_column,
         ]);
     }
@@ -59,7 +58,7 @@ class Produksi extends Controller
             $nestedData['menu'] = '
                 <div class="btn btn-group m-btn-group" role="group" aria-label="...">
                     <a href="' . route('editProduksi', ['id' => $row->id]) . '" class="btn btn-success">Edit</a>
-                    <button href="' . route('deleteProduksi', ['id' => $row->id]) . '" class="btn btn-danger btn-hapus" data-route="">Hapus</button>
+                    <button class="btn btn-danger btn-hapus" data-route="' . route('deleteProduksi', ['id' => $row->id]) . '">Hapus</button>
                 </div>
             ';
 
@@ -80,7 +79,6 @@ class Produksi extends Controller
     {
         $lokasi = mLokasi::all();
         return view('produksi.createProduksi', [
-            'title' => 'Tambah Produksi',
             'lokasi' => $lokasi,
         ]);
     }
@@ -106,7 +104,6 @@ class Produksi extends Controller
     public function edit($id)
     {
         return view('produksi.editProduksi', [
-            'title' => 'Edit Data Produksi',
             'lokasi' => mLokasi::all(),
             'produksi' => mProduksi::find($id),
         ]);

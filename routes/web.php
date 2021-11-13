@@ -18,7 +18,5 @@ Route::get('/editProduksi/{id}', [Produksi::class, 'edit'])
 Route::put('/editProduksi/{id}', [Produksi::class, 'update'])
     ->name('editProduksi');
 
-Route::delete('/deleteProduksi', [Produksi::class, 'destroy'])
+Route::delete('/deleteProduksi/{id}', [Produksi::class, 'destroy'])
     ->name('deleteProduksi');
-
-require __DIR__ . '/auth.php';
