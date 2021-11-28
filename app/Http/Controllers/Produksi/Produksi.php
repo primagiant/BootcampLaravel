@@ -3,9 +3,16 @@
 namespace App\Http\Controllers\Produksi;
 
 use App\Http\Controllers\Controller;
+use App\Models\mBahan;
+use App\Models\mBahanProduksi;
+use App\Models\mDetailProduksi;
+use App\Models\mKomposisiProduk;
 use App\Models\mLokasi;
+use App\Models\mProduk;
 use App\Models\mProduksi;
+use App\Models\mStokBahan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Produksi extends Controller
 {
@@ -78,8 +85,10 @@ class Produksi extends Controller
     public function create()
     {
         $lokasi = mLokasi::all();
+        $produk = mProduk::all();
         return view('produksi.createProduksi', [
             'lokasi' => $lokasi,
+            'produk' => $produk,
         ]);
     }
 
@@ -90,15 +99,88 @@ class Produksi extends Controller
             'id_lokasi' => ['required'],
             'tgl_mulai_produksi' => ['required'],
             'tgl_selesai_produksi' => ['required'],
+            'catatan' => ['required'],
+            'id_produk' => ['required'],
+            'id_produk.*' => ['required'],
+            'qty_digunakan' => ['required'],
+            'qty_digunakan.*' => ['required'],
         ]);
 
-        mProduksi::create([
-            'kode_produksi' => $request->kode_produksi,
-            'tgl_mulai_produksi' =>  date('Y-m-d', strtotime($request->tgl_mulai_produksi)),
-            'tgl_selesai_produksi' =>  date('Y-m-d', strtotime($request->tgl_selesai_produksi)),
-            'id_lokasi' =>  $request->id_lokasi,
-            'catatan' =>  $request->catatan,
-        ]);
+        $id_produk_arr = $request->id_produk;
+        $qty_produksi_arr = $request->qty_produksi;
+        $keterangan_arr = $request->keterangan;
+        $qty_digunakan_arr = $request->qty_digunakan;
+        $month = date('m', strtotime($request->tgl_mulai_produksi));
+        $year = date('Y', strtotime($request->tgl_mulai_produksi));
+        $date_modified = date('Y-m-d H:i:s');
+
+        DB::beginTransaction();
+        try {
+            $id_produksi = mProduksi::create([
+                'kode_produksi' => $request->kode_produksi,
+                'tgl_mulai_produksi' =>  date('Y-m-d', strtotime($request->tgl_mulai_produksi)),
+                'tgl_selesai_produksi' =>  date('Y-m-d', strtotime($request->tgl_selesai_produksi)),
+                'id_lokasi' =>  $request->id_lokasi,
+                'catatan' =>  $request->catatan,
+            ])->id;
+
+            $data_detail_produksi = [];
+            foreach ($id_produk_arr as $key => $id_produk) {
+                $qty_produksi = $qty_produksi_arr[$key];
+                $keterangan = $keterangan_arr[$key];
+                $data_detail_produksi[] = [
+                    'id_produksi' => $id_produksi,
+                    'id_produk' => $id_produk,
+                    'month' => $month,
+                    'year' => $year,
+                    'qty' => $qty_produksi,
+                    'keterangan' => $keterangan,
+                    'created_at' => $date_modified,
+                    'updated_at' => $date_modified,
+                ];
+            }
+
+            mDetailProduksi::insert($data_detail_produksi);
+
+            $data_bahan_produksi = [];
+            foreach ($qty_digunakan_arr as $key => $id_stok_bahan_arr) {
+                foreach ($id_stok_bahan_arr as $id_stok_bahan => $qty_digunakan) {
+                    $id_bahan = mStokBahan::where('id', $id_stok_bahan)->value('id_bahan');
+                    $id_bahan = $id_bahan ? $id_bahan : 0;
+
+                    $id_satuan = mBahan::where('id', $id_bahan)->value('id_satuan');
+                    $id_satuan = $id_satuan ? $id_satuan : 0;
+
+                    $id_lokasi = mStokBahan::where('id', $id_stok_bahan)->value('id_lokasi');
+                    if($id_lokasi) {
+                        $lokasi = mLokasi::where('id', $id_lokasi)->first();
+                        $gudang_qty = $lokasi['lokasi']; 
+                    } else {
+                        $gudang_qty = '';
+                    }
+
+                    $qty = mStokBahan::where('id', $id_stok_bahan)->value('qty');
+                    $qty = $qty ? $qty : 0;
+
+                    $data_bahan_produksi[] = [
+                        'id_produksi' => $id_produksi,
+                        'id_bahan' => $id_bahan,
+                        'id_satuan' => $id_satuan,
+                        'qty_diperlukan' => $qty_digunakan,
+                        'gudang_qty' => $gudang_qty,
+                        'qty' => $qty,
+                        'created_at' => $date_modified,
+                        'updated_at' => $date_modified
+                    ];
+                }
+                mBahanProduksi::insert($data_bahan_produksi);
+
+                DB::commit();
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+        }
     }
 
     public function edit($id)
@@ -133,4 +215,29 @@ class Produksi extends Controller
     {
         mProduksi::find($id)->delete();
     }
+
+    function bahan_list(Request $request)
+    {
+        $id_produk = $request->input('id_produk');
+        $qty_produksi = $request->input('qty_produksi');
+
+        $komposisi_produk = mKomposisiProduk
+            ::select([
+                'tb_bahan.*',
+                'tb_komposisi_produk.*',
+                'tb_komposisi_produk.qty AS komposisi_qty'
+            ])
+            ->leftJoin('tb_bahan', 'tb_bahan.id', '=', 'tb_komposisi_produk.id_bahan')
+            ->where('tb_komposisi_produk.id_produk', $id_produk)
+            ->orderBy('nama_bahan', 'ASC')
+            ->get();
+
+        $data = [
+            'qty_produksi' => $qty_produksi,
+            'komposisi_produk' => $komposisi_produk
+        ];
+
+        return view('produksi.produksiBahanList', $data);
+    }
+
 }

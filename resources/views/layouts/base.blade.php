@@ -14,8 +14,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
     <script>
         WebFont.load({
-            google: { "families": ["Poppins:300,400,500,600,700", "Roboto:300,400,500,600,700"] },
-            active: function () {
+            google: {
+                "families": ["Poppins:300,400,500,600,700", "Roboto:300,400,500,600,700"]
+            },
+            active: function() {
                 sessionStorage.fonts = true;
             }
         });
@@ -28,7 +30,7 @@
     @yield('css')
 </head>
 
-<body data-csrf-token="{{csrf_token()}}"
+<body data-csrf-token="{{ csrf_token() }}" data-produksi-bahan-list="{{ route('produksiBahanList') }}"
     class="m-page--fluid m--skin- m-content--skin-light2 m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--offcanvas m-footer--push m-aside--offcanvas-default">
     <!-- begin:: Page -->
     <div class="m-grid m-grid--hor m-grid--root m-page">
@@ -243,7 +245,7 @@
                 <div class="m-stack m-stack--flex-tablet-and-mobile m-stack--ver m-stack--desktop">
                     <div class="m-stack__item m-stack__item--left m-stack__item--middle m-stack__item--last">
                         <span class="m-footer__copyright">
-                            {{date('Y')}} -
+                            {{ date('Y') }} -
                             <a href="#" class="m-link">
                                 Prima Giant
                             </a>

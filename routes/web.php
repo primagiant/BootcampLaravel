@@ -20,3 +20,6 @@ Route::put('/editProduksi/{id}', [Produksi::class, 'update'])
 
 Route::delete('/deleteProduksi/{id}', [Produksi::class, 'destroy'])
     ->name('deleteProduksi');
+
+Route::post('/bahan/list', [Produksi::class, 'bahan_list'])
+    ->name('produksiBahanList');
